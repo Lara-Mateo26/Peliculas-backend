@@ -61,4 +61,26 @@ router.put('/:tipoId',
     }
 });
 
+router.delete('/:tipoId',
+    async function(req, res) {
+        try {
+            let tipo = await Tipo.findById(req.params.tipoId);
+            if (!tipo) {
+                return res.send('Tipo no existe');
+            }
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ messages: errors.array() })
+            }
+
+            tipo = await tipo.deleteOne();
+
+            res.send(tipo);
+    } catch (error){
+        console.log(error);
+        res.send('Ocurrio un error');
+    }
+});
+
 module.exports = router;

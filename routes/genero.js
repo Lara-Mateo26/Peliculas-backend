@@ -63,4 +63,26 @@ router.put('/:generoId',
     }
 });
 
+router.delete('/:generoId',
+    async function(req, res) {
+        try {
+            let genero = await Genero.findById(req.params.generoId);
+            if (!genero) {
+                return res.send('genero no existe');
+            }
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ messages: errors.array() })
+            }
+
+            genero = await genero.deleteOne();
+
+            res.send(genero);
+    } catch (error){
+        console.log(error);
+        res.send('Ocurrio un error');
+    } 
+});
+
 module.exports = router;

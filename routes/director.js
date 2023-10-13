@@ -61,4 +61,26 @@ router.put('/:directorId',
     }
 });
 
+router.delete('/:directorId',
+    async function(req, res) {
+        try {
+            let director = await Director.findById(req.params.directorId);
+            if (!director) {
+                return res.send('director no existe');
+            }
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ messages: errors.array() })
+            }
+
+            director = await director.deleteOne();
+
+            res.send(director);
+    } catch (error){
+        console.log(error);
+        res.send('Ocurrio un error');
+    } 
+});
+
 module.exports = router;

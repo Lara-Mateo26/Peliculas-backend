@@ -88,4 +88,20 @@ router.get('/:mediaId', async function(req, res){
     }
 });
 
+router.delete('/:mediaId', async function(req, res){
+    try{
+        let media = await Media.findById(req.params.mediaId);
+        if(!media){
+            return res.status(400).send('Media no existe');
+        }
+
+        media = await media.deleteOne();
+
+        res.send(media);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Ocurrio un error al eliminar media')
+    }
+});
+
 module.exports = router; 
