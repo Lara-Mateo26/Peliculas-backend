@@ -103,11 +103,7 @@ router.get('/:mediaId', [validarJWT, validarRolAdmin], async function(req, res){
     }
 });
 
-<<<<<<< HEAD
 router.delete('/:mediaId', [validarJWT, validarRolAdmin], async function(req, res){
-=======
-router.delete('/:mediaId', async function(req, res){
->>>>>>> 1ba103d5f804c84e0412356ac87ed982f994465f
     try{
         let media = await Media.findById(req.params.mediaId);
         if(!media){
