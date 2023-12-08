@@ -63,7 +63,11 @@ router.put('/:directorId', [validarJWT, validarRolAdmin],
     }
 });
 
+<<<<<<< HEAD
 router.delete('/:directorId', [validarJWT, validarRolAdmin],
+=======
+router.delete('/:directorId',
+>>>>>>> 1ba103d5f804c84e0412356ac87ed982f994465f
     async function(req, res) {
         try {
             let director = await Director.findById(req.params.directorId);
