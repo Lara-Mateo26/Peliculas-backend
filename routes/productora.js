@@ -67,11 +67,7 @@ router.put('/:productoraId', [validarJWT, validarRolAdmin],
     }
 });
 
-<<<<<<< HEAD
 router.delete('/:productoraId', [validarJWT, validarRolAdmin],
-=======
-router.delete('/:productoraId',
->>>>>>> 1ba103d5f804c84e0412356ac87ed982f994465f
     async function(req, res) {
         try {
             let productora = await Productora.findById(req.params.productoraId);
