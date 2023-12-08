@@ -65,11 +65,7 @@ router.put('/:generoId', [validarJWT, validarRolAdmin],
     }
 });
 
-<<<<<<< HEAD
 router.delete('/:generoId', [validarJWT, validarRolAdmin],
-=======
-router.delete('/:generoId',
->>>>>>> 1ba103d5f804c84e0412356ac87ed982f994465f
     async function(req, res) {
         try {
             let genero = await Genero.findById(req.params.generoId);
