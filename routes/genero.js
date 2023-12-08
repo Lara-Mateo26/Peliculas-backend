@@ -1,10 +1,12 @@
 const { Router } = require('express');
 const {validationResult} = require('express-validator');
 const Genero = require('../models/Genero');
+const { validarJWT } = require('../middleware/validar-jwt');
+const { validarRolAdmin } = require('../middleware/validar-rol-admin');
 
 const router = Router();
 
-router.get('/', async function(req, res) {
+router.get('/', [validarJWT, validarRolAdmin], async function(req, res) {
     try {
         const generos = await Genero.find();
         res.send(generos);
@@ -14,7 +16,7 @@ router.get('/', async function(req, res) {
     }
 });
 
-router.post('/',
+router.post('/', [validarJWT, validarRolAdmin],
     async function(req, res) {
         try {
             const errors = validationResult(req);
@@ -37,7 +39,7 @@ router.post('/',
     }
 });
 
-router.put('/:generoId',
+router.put('/:generoId', [validarJWT, validarRolAdmin],
     async function(req, res) {
         try {
             let genero = await Genero.findById(req.params.generoId);
@@ -61,6 +63,28 @@ router.put('/:generoId',
         console.log(error);
         res.send('Ocurrio un error');
     }
+});
+
+router.delete('/:generoId', [validarJWT, validarRolAdmin],
+    async function(req, res) {
+        try {
+            let genero = await Genero.findById(req.params.generoId);
+            if (!genero) {
+                return res.send('genero no existe');
+            }
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ messages: errors.array() })
+            }
+
+            genero = await genero.deleteOne();
+
+            res.send(genero);
+    } catch (error){
+        console.log(error);
+        res.send('Ocurrio un error');
+    } 
 });
 
 module.exports = router;

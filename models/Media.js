@@ -28,19 +28,19 @@ const MediaSchema = Schema({
         required: true,
       },
       genero: {
-        type: String,
+        type: Schema.Types.ObjectId, ref:'Genero',
         required: true,      
       },
       director: {
-        type: String,
+        type: Schema.Types.ObjectId, ref:'Director',
         required: true,      
       },
       productora: {
-        type: String,
+        type: Schema.Types.ObjectId, ref:'Productora',
         required: true,      
       },
       tipo: {
-        type: String,
+        type: Schema.Types.ObjectId, ref:'Tipo',
         required: true,      
       },
     },

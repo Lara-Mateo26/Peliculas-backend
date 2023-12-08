@@ -1,10 +1,12 @@
 const { Router } = require('express');
 const {validationResult} = require('express-validator');
 const Productora = require('../models/Productora');
+const { validarJWT } = require('../middleware/validar-jwt');
+const { validarRolAdmin } = require('../middleware/validar-rol-admin');
 
 const router = Router();
 
-router.get('/', async function(req, res) {
+router.get('/',  [validarJWT, validarRolAdmin], async function(req, res) {
     try {
         const productoras = await Productora.find();
         res.send(productoras);
@@ -14,7 +16,7 @@ router.get('/', async function(req, res) {
     }
 });
 
-router.post('/',
+router.post('/', [validarJWT, validarRolAdmin],
     async function(req, res) {
         try {
             const errors = validationResult(req);
@@ -38,7 +40,7 @@ router.post('/',
     }
 });
 
-router.put('/:productoraId',
+router.put('/:productoraId', [validarJWT, validarRolAdmin],
     async function(req, res) {
         try {
             let productora = await Productora.findById(req.params.productoraId);
@@ -57,6 +59,28 @@ router.put('/:productoraId',
             productora.descripcion = req.body.descripcion;
 
             productora = await productora.save();
+
+            res.send(productora);
+    } catch (error){
+        console.log(error);
+        res.send('Ocurrio un error');
+    }
+});
+
+router.delete('/:productoraId', [validarJWT, validarRolAdmin],
+    async function(req, res) {
+        try {
+            let productora = await Productora.findById(req.params.productoraId);
+            if (!productora) {
+                return res.send('productora no existe');
+            }
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ messages: errors.array() })
+            }
+
+            productora = await productora.deleteOne();
 
             res.send(productora);
     } catch (error){
